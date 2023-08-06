@@ -11,10 +11,10 @@ const PORT = process.env.PORT || 3000;
 // Configuration for the channels you want to include
 let config = {
     includeLanguages: [],
-    includeCountries: ['BE'],
-    excludeLanguages: ['fra', 'ger'],
+    includeCountries: ['BE', 'NL', 'FR', 'IT', 'UK', 'US'],
+    excludeLanguages: [],
     excludeCountries: [],
-    excludeCategories: ['legislative', 'music', 'XXX'],
+    excludeCategories: ['legislative'],
 };
 
 const app = express();
