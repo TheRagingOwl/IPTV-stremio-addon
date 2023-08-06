@@ -1,32 +1,39 @@
-# My IPTV Add-on for Stremio
+# Stremio IPTV Add-on
 
-This Stremio add-on provides access to various IPTV channels using M3U links. It leverages the excellent work done by [iptv-org](https://github.com/iptv-org), a collection of publicly available IPTV channels from all over the world.
+Stremio IPTV Add-on is a powerful extension that brings a wide range of Internet Protocol Television (IPTV) channels to your Stremio app. It leverages the iptv-org API, providing a vast selection of live channels across different genres and regions.
+
+![Stremio IPTV Add-on Screenshot](screenshot.png)
 
 ## Features
 
-- Multiple M3U link support
-- Integration with iptv-org's database/API
-- Easy to use and configure
+- **Wide Range of Channels**: Access a plethora of live channels from various categories including sports, news, entertainment, and more.
+- **Easy to Install**: One-click installation for a seamless experience.
+- **Regular Updates**: Stay up-to-date with the latest channels and features.
 
 ## Installation
 
-1. Clone this repository: `git clone https://github.com/G1-R0/stremio-iptv-addon.git`
-2. Navigate to the directory: `cd iptv-stremio-addon`
-3. Install dependencies: `npm install`
-4. Run the add-on: `node index.js`
+1. **Visit the URL**: Go to [iptv-stremio-addon.onrender.com](https://iptv-stremio-addon.onrender.com).
+2. **Click on Install**: Follow the on-screen instructions to install the add-on.
+3. **Open Stremio**: Once installed, open Stremio and navigate to the add-ons section to find the IPTV add-on.
+4. **Enjoy Streaming**: Select your desired channel and start streaming live!
 
 ## Usage
 
-Add the add-on URL to Stremio to start watching your favorite IPTV channels.
+After installation, browse through the various categories and regions to find the channels that interest you. Click on a channel to start streaming live.
 
-## Credits
+## Contributing
 
-Special thanks to [iptv-org](https://github.com/iptv-org) for their fantastic work on collecting and maintaining publicly available IPTV channels.
+If you want to contribute, please fork the repository and create a pull request, or simply open an issue with your comments or suggestions.
 
 ## License
 
-[Your chosen license, if any]
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgements
+
+- Thanks to [iptv-org](https://github.com/iptv-org) for providing the API that made this add-on possible.
+- Special appreciation to the Stremio community for the support and collaboration.
 
 ## Support
 
-For support or any questions, please [open an issue](https://github.com/G1-R0/stremio-iptv-addon/issues) on GitHub.
+If you encounter any issues or have any questions, please feel free to open an issue or contact me directly.
