@@ -2,7 +2,8 @@
 
 Stremio IPTV Add-on is a powerful extension that brings a wide range of Internet Protocol Television (IPTV) channels to your Stremio app. It leverages the iptv-org API, providing a vast selection of live channels across different genres and regions.
 
-![Stremio IPTV Add-on Screenshot](screenshot.png)
+![Stremio IPTV Add-on Screenshot catalog](Screenshot 2023-08-06 at 20.15.51.jpg)
+![Stremio IPTV Add-on Screenshot detail](Screenshot 2023-08-06 at 20.15.58.jpg)
 
 ## Features
 
