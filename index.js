@@ -173,5 +173,5 @@ app.get('/manifest.json', (req, res) => {
 });
 serveHTTP(addon.getInterface(), { server: app, path: '/manifest.json', port: PORT });
 console.clear();
-console.log(`config is at http://localhost:${PORT}/`);
+// console.log(`config is at http://localhost:${PORT}/`);
 
