@@ -93,7 +93,7 @@ const getChannels = async () => {
             (config.includeLanguages.length === 0 || channel.languages.some(lang => config.includeLanguages.includes(lang))) &&
             (config.excludeLanguages.length === 0 || !channel.languages.some(lang => config.excludeLanguages.includes(lang))) &&
             !config.excludeCategories.some(cat => channel.categories.includes(cat))
-            //&& streamsResponse.data.some((stream) => stream.channel === channel.id)
+            && streamsResponse.data.some((stream) => stream.channel === channel.id)
         );
 
         console.log("Filtered Channels:", filteredChannels.map(channel => channel.name));
