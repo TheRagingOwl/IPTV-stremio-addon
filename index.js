@@ -1,16 +1,38 @@
+const express = require('express');
+const cors = require('cors');
 const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 const axios = require('axios');
 
+const IPTV_CHANNELS_URL = 'https://iptv-org.github.io/api/channels.json';
+const IPTV_STREAMS_URL = 'https://iptv-org.github.io/api/streams.json';
+const IPTV_GUIDES_URL = 'https://iptv-org.github.io/api/guides.json';
+const PORT = process.env.PORT || 3000;
+
 // Configuration for the channels you want to include
-const config = {
-    countries: ['BE', 'NL'],
-    languages: ['nld', 'eng'],
-    excludeCategories: ['legislative', 'music'],
+let config = {
+    includeLanguages: [],
+    includeCountries: ['BE'],
+    excludeLanguages: ['fra', 'ger'],
+    excludeCountries: [],
+    excludeCategories: ['legislative', 'music', 'XXX'],
 };
+
+const app = express();
+app.use(cors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    optionsSuccessStatus: 204
+}));
+app.use(express.json());
+
+// Serve index.html file from root directory
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
 // Addon Manifest
 const addon = new addonBuilder({
-    id: 'org.iptvaddon',
+    id: 'org.iptv',
     name: 'IPTV Addon',
     version: '0.0.1',
     description: 'Watch live TV from selected countries and languages',
@@ -20,8 +42,19 @@ const addon = new addonBuilder({
         type: 'tv',
         id: 'iptv-channels',
         name: 'IPTV',
+        extra: [{ name: 'search' }],
     }],
     idPrefixes: ['iptv-'],
+    behaviorHints: { configurable: true, configurationRequired: false },
+    logo: "https://dl.strem.io/addon-logo.png",
+    icon: "https://dl.strem.io/addon-logo.png",
+    background: "https://dl.strem.io/addon-background.jpg",
+});
+
+// Endpoint to update configuration
+app.post('/update-config', (req, res) => {
+    config = req.body;
+    res.send('Configuration updated successfully.');
 });
 
 // Convert channel to Stremio accepted Meta object
@@ -50,17 +83,26 @@ const extractGuideDetails = (guide) => {
 
 // Fetch Channels based on the configuration
 const getChannels = async () => {
-    const channelsResponse = await axios.get('https://iptv-org.github.io/api/channels.json');
-    const streamsResponse = await axios.get('https://iptv-org.github.io/api/streams.json');
+    try {
+        const channelsResponse = await axios.get(IPTV_CHANNELS_URL);
+        const streamsResponse = await axios.get(IPTV_STREAMS_URL);
 
-    return channelsResponse.data
-        .filter((channel) =>
-            config.countries.includes(channel.country) &&
-            config.languages.some(lang => channel.languages.includes(lang)) &&
-            !config.excludeCategories.some(cat => channel.categories.includes(cat)) &&
-            streamsResponse.data.some((stream) => stream.channel === channel.id) // Filter channels with matching streams
-        )
-        .map((channel) => toMeta(channel, null)); // Pass null for guideDetails
+        const filteredChannels = channelsResponse.data.filter((channel) =>
+            (config.includeCountries.length === 0 || config.includeCountries.includes(channel.country)) &&
+            (config.excludeCountries.length === 0 || !config.excludeCountries.includes(channel.country)) &&
+            (config.includeLanguages.length === 0 || channel.languages.some(lang => config.includeLanguages.includes(lang))) &&
+            (config.excludeLanguages.length === 0 || !channel.languages.some(lang => config.excludeLanguages.includes(lang))) &&
+            !config.excludeCategories.some(cat => channel.categories.includes(cat))
+            //&& streamsResponse.data.some((stream) => stream.channel === channel.id)
+        );
+
+        console.log("Filtered Channels:", filteredChannels.map(channel => channel.name));
+
+        return filteredChannels.map((channel) => toMeta(channel, null));
+    } catch (error) {
+        console.error('Error fetching channels:', error);
+        return [];
+    }
 };
 
 // Catalog Handler
@@ -123,6 +165,13 @@ addon.defineStreamHandler(async (args) => {
 });
 
 // Serve Add-on on Port 3000
-serveHTTP(addon.getInterface(), { port: 3000 });
+app.get('/manifest.json', (req, res) => {
+    const manifest = addon.getInterface();
+    console.log(manifest);
+    res.setHeader('Content-Type', 'application/json');
+    res.json(manifest);
+});
+serveHTTP(addon.getInterface(), { server: app, path: '/manifest.json', port: PORT });
 console.clear();
-console.log('Add-on is running at http://127.0.0.1:3000/manifest.json');
+console.log(`config is at http://localhost:${PORT}/`);
+
