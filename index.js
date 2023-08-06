@@ -3,9 +3,9 @@ const axios = require('axios');
 
 // Configuration for the channels you want to include
 const config = {
-    countries: ['BE'],
-    languages: ['nld'],
-    excludeCategories: ['music', 'general', 'Religious', 'news', 'XXX'],
+    countries: ['BE', 'NL'],
+    languages: ['nld', 'eng'],
+    excludeCategories: ['legislative', 'music'],
 };
 
 // Addon Manifest
@@ -39,7 +39,7 @@ const toMeta = (channel, guideDetails) => ({
 
 // Function to extract relevant details from guide information (replace with actual logic)
 const extractGuideDetails = (guide) => {
-    console.log(guide);
+    // console.log('guide: ', guide);
     // Extract relevant details from guide information (update as needed)
     return {
         nowPlaying: 'Example Now Playing',
@@ -50,19 +50,23 @@ const extractGuideDetails = (guide) => {
 
 // Fetch Channels based on the configuration
 const getChannels = async () => {
-    const response = await axios.get('https://iptv-org.github.io/api/channels.json');
-    return response.data.filter((channel) =>
-        config.countries.includes(channel.country) &&
-        config.languages.some(lang => channel.languages.includes(lang)) &&
-        !config.excludeCategories.some(cat => channel.categories.includes(cat))
-    ).map((channel) => toMeta(channel, null)); // Pass null for guideDetails
+    const channelsResponse = await axios.get('https://iptv-org.github.io/api/channels.json');
+    const streamsResponse = await axios.get('https://iptv-org.github.io/api/streams.json');
+
+    return channelsResponse.data
+        .filter((channel) =>
+            config.countries.includes(channel.country) &&
+            config.languages.some(lang => channel.languages.includes(lang)) &&
+            !config.excludeCategories.some(cat => channel.categories.includes(cat)) &&
+            streamsResponse.data.some((stream) => stream.channel === channel.id) // Filter channels with matching streams
+        )
+        .map((channel) => toMeta(channel, null)); // Pass null for guideDetails
 };
 
 // Catalog Handler
 addon.defineCatalogHandler(async (args) => {
     if (args.type === 'tv' && args.id === 'iptv-channels') {
         const channels = await getChannels();
-        console.log('channels: ', channels);
         return { metas: channels };
     }
     return { metas: [] };
@@ -80,6 +84,7 @@ addon.defineMetaHandler(async (args) => {
         const channelID = args.id.split('iptv-')[1];
         const response = await axios.get('https://iptv-org.github.io/api/channels.json');
         const channel = response.data.find((channel) => channel.id === channelID);
+        // console.log('channel: ', channel);
         if (channel) {
             // Fetch guide information
             const guideInfo = await getGuideInfo(channelID);
@@ -99,11 +104,9 @@ addon.defineStreamHandler(async (args) => {
         const channelID = args.id.split('iptv-')[1];
         const streamsResponse = await axios.get('https://iptv-org.github.io/api/streams.json');
         const stream = streamsResponse.data.find((stream) => stream.channel === channelID);
-        console.log('channelID: ', channelID);
 
         if (stream) {
-            console.log('stream.channel: ', stream.channel);
-            console.log('stream: ', stream);
+            // console.log('stream: ', stream);
             return {
                 streams: [
                     {
@@ -121,4 +124,5 @@ addon.defineStreamHandler(async (args) => {
 
 // Serve Add-on on Port 3000
 serveHTTP(addon.getInterface(), { port: 3000 });
+console.clear();
 console.log('Add-on is running at http://127.0.0.1:3000/manifest.json');
