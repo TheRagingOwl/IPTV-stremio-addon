@@ -20,7 +20,7 @@ Stremio IPTV Add-on is a powerful extension that brings a wide range of Internet
 
 ## Usage
 
-After installation, browse through the various categories and regions to find the channels that interest you. Click on a channel to start streaming live.
+After installation, browse through the various categories and regions to find the channels that interest you(TBA). Click on a channel to start streaming live.
 
 ## Contributing
 
