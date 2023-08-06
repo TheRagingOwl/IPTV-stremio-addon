@@ -14,7 +14,7 @@ let config = {
     includeCountries: ['BE', 'NL', 'FR', 'IT', 'UK', 'US'],
     excludeLanguages: [],
     excludeCountries: [],
-    excludeCategories: ['legislative', 'XXX'],
+    excludeCategories: ['legislative', 'xxx', 'music'],
 };
 
 const app = express();
