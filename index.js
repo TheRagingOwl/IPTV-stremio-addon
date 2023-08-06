@@ -96,7 +96,7 @@ const getChannels = async () => {
             && streamsResponse.data.some((stream) => stream.channel === channel.id)
         );
 
-        console.log("Filtered Channels:", filteredChannels.map(channel => channel.name));
+        // console.log("Filtered Channels:", filteredChannels.map(channel => channel.name));
 
         return filteredChannels.map((channel) => toMeta(channel, null));
     } catch (error) {
