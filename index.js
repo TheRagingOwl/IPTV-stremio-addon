@@ -3,7 +3,7 @@ const cors = require('cors');
 const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 const axios = require('axios');
 
-const IPTV_CHANNELS_URL = 'https://iptv-org.github.io/api/channels.json';
+const IPTV_CHANNELS_URL = 'https://github.com/TheRagingOwl/api/blob/master/channels.json';
 const IPTV_STREAMS_URL = 'https://iptv-org.github.io/api/streams.json';
 const IPTV_GUIDES_URL = 'https://iptv-org.github.io/api/guides.json';
 const PORT = process.env.PORT || 3000;
