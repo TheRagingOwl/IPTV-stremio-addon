@@ -4,8 +4,8 @@ const { addonBuilder, serveHTTP } = require('stremio-addon-sdk');
 const axios = require('axios');
 
 const IPTV_CHANNELS_URL = 'https://github.com/TheRagingOwl/api/blob/master/channels.json';
-const IPTV_STREAMS_URL = 'https://iptv-org.github.io/api/streams.json';
-const IPTV_GUIDES_URL = 'https://iptv-org.github.io/api/guides.json';
+const IPTV_STREAMS_URL = 'https://github.com/TheRagingOwl/api/blob/master/streams.json';
+const IPTV_GUIDES_URL = 'https://github.com/TheRagingOwl/api/blob/master/streams.json';
 const PORT = process.env.PORT || 3000;
 
 // Configuration for the channels you want to include
